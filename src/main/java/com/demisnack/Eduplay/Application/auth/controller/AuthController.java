@@ -1,19 +1,15 @@
 package com.demisnack.Eduplay.Application.auth.controller;
 
 
-import com.demisnack.Eduplay.Application.auth.dto.LoginRequest;
-import com.demisnack.Eduplay.Application.auth.dto.LoginResponse;
-import com.demisnack.Eduplay.Application.auth.dto.RegisterRequest;
-import com.demisnack.Eduplay.Application.auth.dto.RegisterResponse;
+import com.demisnack.Eduplay.Application.auth.dto.*;
 import com.demisnack.Eduplay.Application.auth.service.AuthService;
 import com.demisnack.Eduplay.Application.global.response.GlobalResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -64,6 +60,20 @@ public class AuthController {
     public ResponseEntity<Void> logout() {
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<GlobalResponse<UserProfileResponse>> getMe(Principal principal) {
+
+        //Principal = email user
+        UserProfileResponse responseData = authService.getMe(principal.getName());
+
+        GlobalResponse<UserProfileResponse> response = GlobalResponse.<UserProfileResponse>builder()
+                .success(true)
+                .data(responseData)
+                .build();
+
+        return ResponseEntity.ok(response);
     }
 
 }

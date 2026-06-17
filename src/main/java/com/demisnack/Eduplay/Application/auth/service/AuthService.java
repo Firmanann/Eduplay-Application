@@ -1,9 +1,6 @@
 package com.demisnack.Eduplay.Application.auth.service;
 
-import com.demisnack.Eduplay.Application.auth.dto.LoginRequest;
-import com.demisnack.Eduplay.Application.auth.dto.LoginResponse;
-import com.demisnack.Eduplay.Application.auth.dto.RegisterRequest;
-import com.demisnack.Eduplay.Application.auth.dto.RegisterResponse;
+import com.demisnack.Eduplay.Application.auth.dto.*;
 import com.demisnack.Eduplay.Application.global.exception.BusinessException;
 import com.demisnack.Eduplay.Application.global.exception.ErrorCode;
 import com.demisnack.Eduplay.Application.global.jwt.customuserdetail.CustomUserDetails;
@@ -72,6 +69,27 @@ public class AuthService {
                 .name(user.getName()) // Pakai name, bukan username
                 .email(user.getEmail())
                 .role(user.getRole().getStatus()) // Ambil dari field status di RolesEntity
+                .build();
+    }
+
+    public UserProfileResponse getMe(String email) {
+
+        // 1. Cari user berdasarkan email yang diekstrak dari Token
+        UserEntity user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User tidak ditemukan")); // Ganti dengan BusinessException lu
+
+        // 2. Logic penentuan currency sederhana
+        String currency = "ID".equalsIgnoreCase(user.getCountry()) ? "IDR" : "USD";
+
+        // 3. Bungkus jadi DTO
+        return UserProfileResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .role(user.getRole().getStatus())
+                .country(user.getCountry())
+                .currency(currency)
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 }

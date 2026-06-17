@@ -47,7 +47,7 @@ POST /auth/logout [DONE]
 - Request: Tidak ada body
 - Response (204 No Content)
 ---
-GET /auth/me
+GET /auth/me 
 Header: `Authorization: Bearer <token>`
 Response (200 OK):
 {
