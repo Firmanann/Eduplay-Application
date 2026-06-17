@@ -8,4 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface RolesRepository extends JpaRepository<RolesEntity, UUID> {
+
+    Optional<RolesEntity> findByStatus(String status);
+
 }

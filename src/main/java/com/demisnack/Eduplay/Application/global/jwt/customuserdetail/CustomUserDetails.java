@@ -25,7 +25,7 @@ public class CustomUserDetails implements UserDetails {
     // Langsung kita tembak ke nama Role dari relasi database lu
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getRole().getName()));
+        return List.of(new SimpleGrantedAuthority(user.getRole().getStatus()));
     }
 
     @Override

@@ -1,8 +1,7 @@
 -- 1. Table Roles (Domain: Auth)
 CREATE TABLE roles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(50) UNIQUE NOT NULL,
-    description VARCHAR(255)
+    status VARCHAR(50) UNIQUE NOT NULL
 );
 
 -- 2. Table Users (Domain: Auth)
@@ -46,8 +45,5 @@ CREATE TABLE contents (
     CONSTRAINT fk_contributor_content FOREIGN KEY (contributor_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Insert Default Roles (Opsional, untuk seeding awal)
-INSERT INTO roles (name, description) VALUES
-('ROLE_USER', 'Guru pengguna umum'),
-('ROLE_CONTRIBUTOR', 'Kreator konten marketplace'),
-('ROLE_ADMIN', 'Administrator sistem');
+-- Insert Default Roles
+INSERT INTO roles (status) VALUES ('USER'), ('CONTRIBUTOR'), ('ADMIN');
