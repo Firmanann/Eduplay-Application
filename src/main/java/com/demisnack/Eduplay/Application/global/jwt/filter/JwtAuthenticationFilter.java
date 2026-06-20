@@ -38,40 +38,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         //1. Pengecekan endpoint Jika tidak terdapat header "Bearer", lempar ke securityFilterChain
         //Jika terdapat header "Bearer", lanjut ke next steps
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-
-            //Lempar ke securityFilterChain
             filterChain.doFilter(request, response);
             return;
         }
 
-        //Proses jika terdapat header "Bearer"
         // 2. Extract Tokennya
         jwt = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(jwt);
 
-        // 3. Kalau ada email di token dan user belum tersimpan di context
-        if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        try {
+            // Proses ekstraksi token dibungkus try-catch agar tidak 500 jika token invalid/ngasal
+            userEmail = jwtService.extractUsername(jwt);
 
-            //Buat objek/user berdasarkan email dari token
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+            // 3. Kalau ada email di token dan user belum tersimpan di context
+            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            //Cek Keaslian Token
-            if (jwtService.isTokenValid(jwt, userDetails)) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-                //berikan authorization kepada user
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities()
-                );
+                //Cek Keaslian Token
+                if (jwtService.isTokenValid(jwt, userDetails)) {
 
-                //Lengkapi data user dengan IP, Session ID/browser
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities()
+                    );
 
-                //Simpan data akhir userDetails ke Security Context
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+        } catch (Exception e) {
         }
 
-        //Jika Proses 3 gagal maka lempar ke securityFilterChain
+        //Jika Proses 3 gagal atau masuk catch, lempar ke securityFilterChain
         filterChain.doFilter(request, response);
     }
 }

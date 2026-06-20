@@ -13,7 +13,14 @@ public enum ErrorCode {
     EMAIL_EXISTS(HttpStatus.CONFLICT, "Email sudah digunakan"), // 409 Conflict standar untuk duplikasi data
     ROLE_NOT_FOUND(HttpStatus.NOT_FOUND, "Roles tidak ditemukan"),
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "Email tidak terdaftar"),
-    EMAIL_PASSWORD_INVALID(HttpStatus.UNAUTHORIZED, "Email atau Password salah"); // 401 Unauthorized untuk gagal login
+    EMAIL_PASSWORD_INVALID(HttpStatus.UNAUTHORIZED, "Email atau Password salah"), // 401 Unauthorized untuk gagal login
+
+    // Error untuk Catalog & Library
+    GAME_NOT_FOUND(HttpStatus.NOT_FOUND, "Game tidak ditemukan"),
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "User tidak ditemukan"),
+    ALREADY_OWNED(HttpStatus.BAD_REQUEST, "Lu udah punya game ini bro!"),
+    INSUFFICIENT_BALANCE(HttpStatus.BAD_REQUEST, "Saldo lu kurang bro!"),
+    NOT_OWNED(HttpStatus.FORBIDDEN, "Lu belum beli game ini bro!");
 
 
     private final HttpStatus httpStatus;

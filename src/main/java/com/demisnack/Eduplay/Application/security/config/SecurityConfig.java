@@ -5,6 +5,7 @@ import com.demisnack.Eduplay.Application.global.jwt.filter.JwtAuthenticationFilt
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,32 +28,27 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // Disable CSRF karena kita pakai JWT
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // Aturan Autorisasi Endpoint
                 .authorizeHttpRequests(auth -> auth
-                        // Pintu masuk Auth (tanpa refresh token)
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/error").permitAll()
-
-                        // Marketplace dibuka publik biar user bisa explore
-                        .requestMatchers("/api/catalog/**").permitAll()
-
-                        // Sisanya (Generator, Profile, Contributor) wajib login
+                        .requestMatchers(
+                                "/api/auth/register/user",
+                                "/api/auth/register/contributor",
+                                "/api/auth/login",
+                                "/error"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/catalog/**").permitAll()
                         .anyRequest().authenticated()
                 )
 
-                // Custom respon error kalau token tidak valid/kosong
+                // Custom respon error (Token)
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(authenticationEntryPoint)
                 )
-
-                // Pastikan session tidak disimpan di server (Stateless)
+                //Stateless
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
-                // Eksekusi filter JWT sebelum filter bawaan Spring Security
+                //Filter JWT
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

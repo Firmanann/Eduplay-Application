@@ -12,7 +12,6 @@ public class PasswordService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    //Method untuk Hash password
     public String hashPassword(String rawPassword) {
         return passwordEncoder.encode(rawPassword);
     }
