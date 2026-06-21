@@ -18,6 +18,7 @@ public class CatalogResponse {
     private String title;
     private String description;
     private Integer price;
+    private String fileUrl;
     private String thumbnailUrl;
     private String category;
     private String subject;

@@ -37,6 +37,7 @@ public class CatalogService {
                         .id(content.getId().toString())
                         .title(content.getTitle())
                         .price(content.getPrice())
+                        .fileUrl(content.getFileUrl())
                         .thumbnailUrl(content.getThumbnailUrl())
                         .category(content.getCategory())
                         .subject(content.getSubject())
