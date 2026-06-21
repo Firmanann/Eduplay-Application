@@ -225,9 +225,13 @@
 {
   "title": "Kuis Sejarah RI (Update)",
   "description": "Revisi soal nomor 5",
-  "price": 20000
+  "price": 20000,
+  "category": "Kuis",
+  "subject": "Sejarah",
+  "gradeLevel": "SMA",
+  "fileUrl": "https://link-baru.com/file",
+  "thumbnailUrl": "https://link-baru.com/gambar"
 }
-
 ```
 * **Response (200 OK):** `data: null`
 ---

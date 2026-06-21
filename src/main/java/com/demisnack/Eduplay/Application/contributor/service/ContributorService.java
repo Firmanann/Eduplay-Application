@@ -84,6 +84,11 @@ public class ContributorService {
         catalog.setTitle(request.getTitle());
         catalog.setDescription(request.getDescription());
         catalog.setPrice(request.getPrice());
+        catalog.setCategory(request.getCategory());
+        catalog.setSubject(request.getSubject());
+        catalog.setGradeLevel(request.getGradeLevel());
+        catalog.setFileUrl(request.getFileUrl());
+        catalog.setThumbnailUrl(request.getThumbnailUrl());
 
         //5.save data
         catalogRepository.save(catalog);
